@@ -487,3 +487,15 @@ These projects address a similar goal and inspired the work on Sablon:
 
 * [ruby-docx-templater](https://github.com/jawspeak/ruby-docx-templater)
 * [docx_mailmerge](https://github.com/annaswims/docx_mailmerge)
+
+
+## lkfken/sablon
+
+I found myself in need to read the template from database (not the actual file). So I added a helper method 
+Sablon.template_from_stream and modified Sablon::Template to accept other parameter besides @path(String).
+ 
+```ruby
+file = File.join('.', 'templates', 'template_001.docx')
+docx_string_io = IO.read(file, mode: 'rb') # or IO.binread(file)
+Sablon.template_from_stream(docx_string_io, context, target: File.join('.', 'tmp', 'render.docx'))
+```
