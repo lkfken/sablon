@@ -12,11 +12,13 @@ GEM
     minitest (5.10.3)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
+    nokogiri (1.8.2-java)
     rake (12.3.0)
     rubyzip (1.2.1)
     xml-simple (1.1.5)
 
 PLATFORMS
+  java
   ruby
 
 DEPENDENCIES
@@ -27,4 +29,4 @@ DEPENDENCIES
   xml-simple
 
 BUNDLED WITH
-   1.16.0
+   1.16.6
