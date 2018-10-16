@@ -24,7 +24,7 @@ module Sablon
       # Returns the processor classes with a pattern matching the
       # entry name. If none match nil is returned.
       def get_processors(entry_name)
-        key = processors.keys.detect { |pattern| entry_name =~ pattern }
+        key = processors.keys.detect {|pattern| entry_name =~ pattern}
         processors[key]
       end
 
@@ -33,8 +33,8 @@ module Sablon
       end
     end
 
-    def initialize(path)
-      @path = path
+    def initialize(obj)
+      @obj = obj
     end
 
     # Same as +render_to_string+ but writes the processed template to +output_path+.
@@ -51,9 +51,20 @@ module Sablon
 
     private
 
+    def source
+      case @obj
+      when String
+        Zip::File.open(@obj)
+      when Array  # array of zip entries
+        @obj
+      else
+        raise "unknown #{@obj.class} source"
+      end
+    end
+
     def render(context, properties = {})
       # initialize environment
-      @document = Sablon::DOM::Model.new(Zip::File.open(@path))
+      @document = Sablon::DOM::Model.new(source)
       env = Sablon::Environment.new(self, context)
       env.section_properties = properties
       #
@@ -72,7 +83,7 @@ module Sablon
       @document.zip_contents.to_a.each do |(entry_name, content)|
         @document.current_entry = entry_name
         processors = Template.get_processors(entry_name)
-        processors.each { |processor| processor.process(content, env) }
+        processors.each {|processor| processor.process(content, env)}
       end
     end
 

@@ -29,4 +29,15 @@ module Sablon
   def self.content(type, *args)
     Content.make(type, *args)
   end
+
+  def self.template_from_stream(stream, context, target:)
+    ::Zip::InputStream.open(StringIO.new(stream)) do |zip|
+      entries = []
+      while (entry = zip.get_next_entry)
+        entries << entry
+      end
+      sablon_template = Sablon.template(entries)
+      sablon_template.render_to_file(target, context)
+    end
+  end
 end
